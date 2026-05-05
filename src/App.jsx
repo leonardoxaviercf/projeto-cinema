@@ -1,9 +1,16 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+
 function App() {
   return (
-    <main>
-      <h1>Sistema de Filmes</h1>
-      <p>Projeto React consumindo a API TMDb.</p>
-    </main>
+    <BrowserRouter>
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
