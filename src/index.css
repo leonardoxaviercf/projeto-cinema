@@ -39,3 +39,34 @@ a {
   display: flex;
   gap: 20px;
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.movie-card {
+  background: #1c1c1c;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.movie-card:hover {
+  transform: scale(1.03);
+}
+
+.movie-card img {
+  width: 100%;
+  display: block;
+}
+
+.movie-card-info {
+  padding: 12px;
+}
+
+.movie-card-info h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
