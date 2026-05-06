@@ -138,6 +138,42 @@ section {
   margin-bottom: 40px;
 }
 
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.filter-buttons button,
+.pagination button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.filter-buttons button:hover,
+.pagination button:hover {
+  background: #b20710;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.pagination button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .details {
     grid-template-columns: 1fr;
