@@ -215,3 +215,28 @@ section {
   background: #555;
   cursor: not-allowed;
 }
+
+.season-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.season-card {
+  background: #1c1c1c;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.season-card img {
+  width: 100%;
+  display: block;
+}
+
+.season-card div {
+  padding: 12px;
+}
+
+.season-card h3 {
+  margin-top: 0;
+}
