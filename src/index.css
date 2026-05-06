@@ -240,3 +240,38 @@ section {
 .season-card h3 {
   margin-top: 0;
 }
+
+.search-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.search-form input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.search-form button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #e50914;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.search-form button:hover {
+  background: #b20710;
+}
+
+@media (max-width: 600px) {
+  .search-form {
+    flex-direction: column;
+  }
+}
