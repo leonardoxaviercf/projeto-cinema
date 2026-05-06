@@ -3,6 +3,7 @@ import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import MovieDetails from "./pages/MovieDetails";
 import Movies from "./pages/Movies";
+import Series from "./pages/Series";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/filme/:id" element={<MovieDetails />} />
         <Route path="/filmes" element={<Movies />} />
+        <Route path="/series" element={<Series />} />
       </Routes>
     </BrowserRouter>
   );
