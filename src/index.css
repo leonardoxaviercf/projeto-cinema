@@ -275,3 +275,15 @@ section {
     flex-direction: column;
   }
 }
+
+.person-images-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.person-images-grid img {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+}
