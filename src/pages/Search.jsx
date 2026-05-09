@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/tmdb";
+import LoadingGrid from "../components/LoadingGrid";
 import MovieCard from "../components/MovieCard";
 
 function Search() {
@@ -45,7 +46,10 @@ function Search() {
 
   return (
     <main className="container">
-      <h1>Buscar</h1>
+      <div className="page-heading">
+        <span className="eyebrow">Descoberta</span>
+        <h1>Buscar</h1>
+      </div>
 
       <form onSubmit={handleSearch} className="search-form">
         <input
@@ -58,17 +62,22 @@ function Search() {
         <button type="submit">Buscar</button>
       </form>
 
-      {loading && <p>Buscando resultados...</p>}
+      {loading && <LoadingGrid count={8} />}
 
-      {error && <p>{error}</p>}
+      {error && <p className="feedback feedback-error">{error}</p>}
 
       {!loading && searched && results.length === 0 && !error && (
-        <p>Nenhum resultado encontrado.</p>
+        <p className="feedback">Nenhum resultado encontrado.</p>
       )}
 
       {!loading && results.length > 0 && (
         <>
-          <h2>Resultados encontrados</h2>
+          <div className="section-header">
+            <div>
+              <span className="eyebrow">{results.length} resultados</span>
+              <h2>Resultados encontrados</h2>
+            </div>
+          </div>
 
           <div className="grid">
             {results.map((item) => (

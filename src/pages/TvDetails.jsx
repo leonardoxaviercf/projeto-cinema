@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api, { imageUrl } from "../api/tmdb";
+import MovieCard from "../components/MovieCard";
 
 function TvDetails() {
   const { id } = useParams();
@@ -50,8 +51,8 @@ function TvDetails() {
   if (error) {
     return (
       <main className="container">
-        <p>{error}</p>
-        <Link to="/">Voltar para início</Link>
+        <p className="feedback feedback-error">{error}</p>
+        <Link to="/" className="text-link">Voltar para início</Link>
       </main>
     );
   }
@@ -59,7 +60,7 @@ function TvDetails() {
   if (!series) {
     return (
       <main className="container">
-        <p>Carregando detalhes da série...</p>
+        <p className="feedback">Carregando detalhes da série...</p>
       </main>
     );
   }
@@ -70,6 +71,8 @@ function TvDetails() {
 
   return (
     <main className="container">
+      <Link to="/series" className="back-link">Voltar para séries</Link>
+
       <section className="details">
         <img
           className="poster"
@@ -77,22 +80,22 @@ function TvDetails() {
           alt={series.name}
         />
 
-        <div>
+        <div className="details-content">
+          <span className="eyebrow">Série</span>
           <h1>{series.name}</h1>
 
           {series.tagline && <p className="tagline">{series.tagline}</p>}
 
+          <div className="details-metrics">
+            <span>Nota {series.vote_average?.toFixed(1) || "N/A"}</span>
+            <span>{firstYear}</span>
+            <span>{series.number_of_seasons || "N/A"} temporadas</span>
+            <span>{series.status || "Status não informado"}</span>
+          </div>
+
           <p>
             {series.overview ||
               "Esta série ainda não possui descrição em português."}
-          </p>
-
-          <p>
-            <strong>Nota:</strong> {series.vote_average?.toFixed(1)}
-          </p>
-
-          <p>
-            <strong>Ano:</strong> {firstYear}
           </p>
 
           <p>
@@ -106,17 +109,7 @@ function TvDetails() {
           </p>
 
           <p>
-            <strong>Temporadas:</strong>{" "}
-            {series.number_of_seasons || "Não informado"}
-          </p>
-
-          <p>
-            <strong>Episódios:</strong>{" "}
-            {series.number_of_episodes || "Não informado"}
-          </p>
-
-          <p>
-            <strong>Status:</strong> {series.status || "Não informado"}
+            <strong>Episódios:</strong> {series.number_of_episodes || "Não informado"}
           </p>
 
           <p>
@@ -132,7 +125,7 @@ function TvDetails() {
         <h2>Temporadas</h2>
 
         {series.seasons?.length === 0 ? (
-          <p>Temporadas não disponíveis.</p>
+          <p className="feedback">Temporadas não disponíveis.</p>
         ) : (
           <div className="season-grid">
             {series.seasons?.map((season) => (
@@ -150,8 +143,7 @@ function TvDetails() {
                   </p>
 
                   <p>
-                    <strong>Exibição:</strong>{" "}
-                    {season.air_date || "Data não informada"}
+                    <strong>Exibição:</strong> {season.air_date || "Data não informada"}
                   </p>
                 </div>
               </div>
@@ -164,7 +156,7 @@ function TvDetails() {
         <h2>Elenco principal</h2>
 
         {cast.length === 0 ? (
-          <p>Elenco não disponível.</p>
+          <p className="feedback">Elenco não disponível.</p>
         ) : (
           <div className="cast-grid">
             {cast.map((person) => (
@@ -190,7 +182,7 @@ function TvDetails() {
         <h2>Imagens da série</h2>
 
         {images.length === 0 ? (
-          <p>Imagens não disponíveis.</p>
+          <p className="feedback">Imagens não disponíveis.</p>
         ) : (
           <div className="image-grid">
             {images.map((image) => (
@@ -208,25 +200,11 @@ function TvDetails() {
         <h2>Recomendações</h2>
 
         {recommendations.length === 0 ? (
-          <p>Não há recomendações disponíveis.</p>
+          <p className="feedback">Não há recomendações disponíveis.</p>
         ) : (
           <div className="grid">
             {recommendations.map((item) => (
-              <Link key={item.id} to={`/serie/${item.id}`} className="movie-card">
-                <img src={imageUrl(item.poster_path)} alt={item.name} />
-
-                <div className="movie-card-info">
-                  <h3>{item.name}</h3>
-
-                  <p>
-                    {item.first_air_date
-                      ? item.first_air_date.substring(0, 4)
-                      : "Sem data"}
-                  </p>
-
-                  <span>⭐ {item.vote_average?.toFixed(1)}</span>
-                </div>
-              </Link>
+              <MovieCard key={item.id} item={item} type="tv" />
             ))}
           </div>
         )}

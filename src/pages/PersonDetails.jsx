@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api, { imageUrl } from "../api/tmdb";
+import MovieCard from "../components/MovieCard";
 
 function PersonDetails() {
   const { id } = useParams();
@@ -51,7 +52,7 @@ function PersonDetails() {
   if (loading) {
     return (
       <main className="container">
-        <p>Carregando detalhes da pessoa...</p>
+        <p className="feedback">Carregando detalhes da pessoa...</p>
       </main>
     );
   }
@@ -59,8 +60,8 @@ function PersonDetails() {
   if (error) {
     return (
       <main className="container">
-        <p>{error}</p>
-        <Link to="/">Voltar para início</Link>
+        <p className="feedback feedback-error">{error}</p>
+        <Link to="/" className="text-link">Voltar para início</Link>
       </main>
     );
   }
@@ -68,13 +69,15 @@ function PersonDetails() {
   if (!person) {
     return (
       <main className="container">
-        <p>Pessoa não encontrada.</p>
+        <p className="feedback">Pessoa não encontrada.</p>
       </main>
     );
   }
 
   return (
     <main className="container">
+      <Link to="/" className="back-link">Voltar para início</Link>
+
       <section className="details">
         <img
           className="poster"
@@ -82,7 +85,8 @@ function PersonDetails() {
           alt={person.name}
         />
 
-        <div>
+        <div className="details-content">
+          <span className="eyebrow">Pessoa</span>
           <h1>{person.name}</h1>
 
           <p>
@@ -90,15 +94,10 @@ function PersonDetails() {
               "Esta pessoa ainda não possui biografia em português."}
           </p>
 
-          <p>
-            <strong>Conhecido por:</strong>{" "}
-            {person.known_for_department || "Não informado"}
-          </p>
-
-          <p>
-            <strong>Nascimento:</strong>{" "}
-            {person.birthday || "Data não informada"}
-          </p>
+          <div className="details-metrics">
+            <span>{person.known_for_department || "Área não informada"}</span>
+            <span>{person.birthday || "Nascimento não informado"}</span>
+          </div>
 
           {person.deathday && (
             <p>
@@ -114,7 +113,7 @@ function PersonDetails() {
           {person.homepage && (
             <p>
               <strong>Site oficial:</strong>{" "}
-              <a href={person.homepage} target="_blank" rel="noreferrer">
+              <a href={person.homepage} target="_blank" rel="noreferrer" className="text-link">
                 Acessar site
               </a>
             </p>
@@ -126,48 +125,16 @@ function PersonDetails() {
         <h2>Participações conhecidas</h2>
 
         {credits.length === 0 ? (
-          <p>Nenhuma participação encontrada.</p>
+          <p className="feedback">Nenhuma participação encontrada.</p>
         ) : (
           <div className="grid">
-            {credits.map((item) => {
-              const title = item.title || item.name;
-              const date = item.release_date || item.first_air_date;
-
-              const link =
-                item.media_type === "movie"
-                  ? `/filme/${item.id}`
-                  : `/serie/${item.id}`;
-
-              return (
-                <Link
-                  key={`${item.media_type}-${item.id}`}
-                  to={link}
-                  className="movie-card"
-                >
-                  <img src={imageUrl(item.poster_path)} alt={title} />
-
-                  <div className="movie-card-info">
-                    <h3>{title}</h3>
-
-                    <p>
-                      {date ? date.substring(0, 4) : "Sem data"}
-                    </p>
-
-                    <p>
-                      {item.media_type === "movie" ? "Filme" : "Série"}
-                    </p>
-
-                    <p>
-                      {item.character
-                        ? `Personagem: ${item.character}`
-                        : "Participação não informada"}
-                    </p>
-
-                    <span>⭐ {item.vote_average?.toFixed(1)}</span>
-                  </div>
-                </Link>
-              );
-            })}
+            {credits.map((item) => (
+              <MovieCard
+                key={`${item.media_type}-${item.id}`}
+                item={item}
+                type={item.media_type === "movie" ? "movie" : "tv"}
+              />
+            ))}
           </div>
         )}
       </section>
@@ -176,7 +143,7 @@ function PersonDetails() {
         <h2>Fotos</h2>
 
         {images.length === 0 ? (
-          <p>Fotos não disponíveis.</p>
+          <p className="feedback">Fotos não disponíveis.</p>
         ) : (
           <div className="person-images-grid">
             {images.map((image) => (
