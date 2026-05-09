@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/tmdb";
+import LoadingGrid from "../components/LoadingGrid";
 import MovieCard from "../components/MovieCard";
 
 function Series() {
@@ -9,12 +10,14 @@ function Series() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const categoryTitles = {
-    popular: "Séries populares",
-    airing_today: "Séries exibidas hoje",
-    on_the_air: "Séries no ar",
-    top_rated: "Séries mais bem avaliadas",
-  };
+  const categories = [
+    { id: "popular", label: "Populares", title: "Séries populares" },
+    { id: "airing_today", label: "Exibidas hoje", title: "Séries exibidas hoje" },
+    { id: "on_the_air", label: "No ar", title: "Séries no ar" },
+    { id: "top_rated", label: "Mais bem avaliadas", title: "Séries mais bem avaliadas" },
+  ];
+
+  const currentCategory = categories.find((item) => item.id === category);
 
   useEffect(() => {
     async function loadSeries() {
@@ -48,31 +51,29 @@ function Series() {
 
   return (
     <main className="container">
-      <h1>Séries</h1>
-
-      <div className="filter-buttons">
-        <button onClick={() => handleCategoryChange("popular")}>
-          Populares
-        </button>
-
-        <button onClick={() => handleCategoryChange("airing_today")}>
-          Exibidas hoje
-        </button>
-
-        <button onClick={() => handleCategoryChange("on_the_air")}>
-          No ar
-        </button>
-
-        <button onClick={() => handleCategoryChange("top_rated")}>
-          Mais bem avaliadas
-        </button>
+      <div className="page-heading">
+        <span className="eyebrow">Catálogo</span>
+        <h1>Séries</h1>
       </div>
 
-      <h2>{categoryTitles[category]}</h2>
+      <div className="filter-buttons" aria-label="Categorias de séries">
+        {categories.map((item) => (
+          <button
+            className={item.id === category ? "active" : ""}
+            key={item.id}
+            onClick={() => handleCategoryChange(item.id)}
+            type="button"
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
-      {loading && <p>Carregando séries...</p>}
+      <h2>{currentCategory.title}</h2>
 
-      {error && <p>{error}</p>}
+      {loading && <LoadingGrid />}
+
+      {error && <p className="feedback feedback-error">{error}</p>}
 
       {!loading && !error && (
         <>
@@ -86,13 +87,14 @@ function Series() {
             <button
               disabled={page === 1}
               onClick={() => setPage((currentPage) => currentPage - 1)}
+              type="button"
             >
               Página anterior
             </button>
 
             <span>Página {page}</span>
 
-            <button onClick={() => setPage((currentPage) => currentPage + 1)}>
+            <button onClick={() => setPage((currentPage) => currentPage + 1)} type="button">
               Próxima página
             </button>
           </div>

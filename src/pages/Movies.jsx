@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/tmdb";
+import LoadingGrid from "../components/LoadingGrid";
 import MovieCard from "../components/MovieCard";
 
 function Movies() {
@@ -9,12 +10,14 @@ function Movies() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const categoryTitles = {
-    popular: "Filmes populares",
-    now_playing: "Filmes em cartaz",
-    top_rated: "Filmes mais bem avaliados",
-    upcoming: "Próximos lançamentos",
-  };
+  const categories = [
+    { id: "popular", label: "Populares", title: "Filmes populares" },
+    { id: "now_playing", label: "Em cartaz", title: "Filmes em cartaz" },
+    { id: "top_rated", label: "Mais bem avaliados", title: "Filmes mais bem avaliados" },
+    { id: "upcoming", label: "Lançamentos", title: "Próximos lançamentos" },
+  ];
+
+  const currentCategory = categories.find((item) => item.id === category);
 
   useEffect(() => {
     async function loadMovies() {
@@ -48,31 +51,29 @@ function Movies() {
 
   return (
     <main className="container">
-      <h1>Filmes</h1>
-
-      <div className="filter-buttons">
-        <button onClick={() => handleCategoryChange("popular")}>
-          Populares
-        </button>
-
-        <button onClick={() => handleCategoryChange("now_playing")}>
-          Em cartaz
-        </button>
-
-        <button onClick={() => handleCategoryChange("top_rated")}>
-          Mais bem avaliados
-        </button>
-
-        <button onClick={() => handleCategoryChange("upcoming")}>
-          Lançamentos
-        </button>
+      <div className="page-heading">
+        <span className="eyebrow">Catálogo</span>
+        <h1>Filmes</h1>
       </div>
 
-      <h2>{categoryTitles[category]}</h2>
+      <div className="filter-buttons" aria-label="Categorias de filmes">
+        {categories.map((item) => (
+          <button
+            className={item.id === category ? "active" : ""}
+            key={item.id}
+            onClick={() => handleCategoryChange(item.id)}
+            type="button"
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
 
-      {loading && <p>Carregando filmes...</p>}
+      <h2>{currentCategory.title}</h2>
 
-      {error && <p>{error}</p>}
+      {loading && <LoadingGrid />}
+
+      {error && <p className="feedback feedback-error">{error}</p>}
 
       {!loading && !error && (
         <>
@@ -86,13 +87,14 @@ function Movies() {
             <button
               disabled={page === 1}
               onClick={() => setPage((currentPage) => currentPage - 1)}
+              type="button"
             >
               Página anterior
             </button>
 
             <span>Página {page}</span>
 
-            <button onClick={() => setPage((currentPage) => currentPage + 1)}>
+            <button onClick={() => setPage((currentPage) => currentPage + 1)} type="button">
               Próxima página
             </button>
           </div>
