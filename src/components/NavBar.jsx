@@ -1,17 +1,17 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function NavBar() {
   return (
     <header className="navbar">
-      <Link to="/" className="logo">
+      <NavLink to="/" className="logo">
         CineReact
-      </Link>
+      </NavLink>
 
       <nav>
-        <Link to="/">Início</Link>
-        <Link to="/filmes">Filmes</Link>
-        <Link to="/series">Séries</Link>
-        <Link to="/buscar">Buscar</Link>
+        <NavLink to="/">Início</NavLink>
+        <NavLink to="/filmes">Filmes</NavLink>
+        <NavLink to="/series">Séries</NavLink>
+        <NavLink to="/buscar">Buscar</NavLink>
       </nav>
     </header>
   );
